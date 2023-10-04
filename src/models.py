@@ -7,23 +7,67 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
+class Location(Base):
+    __tablename__ = 'location'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+
+
+class User(Base):
+    __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    name = Column(String(250), nullable=False)
+    country = Column(String(50))
+    birthday = Column(String(50))
+    email = Column(String(50))
+
+class Followers(Base):
+    __tablename__ = 'followers'
+    id = Column(Integer, primary_key=True)
+    user_from_id = Column(Integer, ForeignKey('user.id'))
+    user_from_relationship = relationship(User)
+    user_to_id = Column(Integer, ForeignKey('user.id'))
+    user_to_relationship = relationship(User)
+
+
+
+class Posts(Base):
+    __tablename__ = 'posts'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id_relationship = relationship(User)
+    
+class Media(Base):
+    __tablename__ = 'media'
+    id = Column(Integer, primary_key=True)
+    caption = Column(String(250))
+    created_time = Column(String(50))
+    img_link = Column(String(250))
+    video_link = Column(String(250))
+    views = Column(Integer)
+    likes = Column(Integer)
+    post_id = Column(Integer, ForeignKey('posts.id'))
+    post_relationship = relationship(Posts)
+    location_id = Column(Integer, ForeignKey('location.id'))
+    location_relationship = relationship(Location)
+    
+
+
+class Comments(Base):
+    __tablename__ = 'comments'
+    id = Column(Integer, primary_key=True)
+    caption = Column(String(250))
+    created_time = Column(String(50))
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+    post_id = Column(Integer, ForeignKey('posts.id'))
+    post = relationship(Posts)
+
+
+
+
+
 
     def to_dict(self):
         return {}
